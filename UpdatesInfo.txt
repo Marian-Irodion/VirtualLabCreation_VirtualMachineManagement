@@ -1,0 +1,4 @@
+In ceea ce priveste update-urile asupra temei mentionez ca:
+1. Avansul in proiect poate fi vizualizat prin task-urile disponibile in tab-ul Projects.
+2. Commit-urile vor fi cu directorul "/home/marian_irodion" in care se gasesec diferitele directoare aferente VM-urilor (create prin Vargrant).
+3. De asemenea vor fi si fisiere text care vor contine: pas cu pas fiecare comanda in procesul de setup(Vargrant, WSL, Ansible, Git), diferitele versiuni de initializare ale "Vargrantfile" + playbook-urile in Ansible.
