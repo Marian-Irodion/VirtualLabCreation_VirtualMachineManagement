@@ -1,0 +1,135 @@
+Vagrant:
+-pentru descarcarea ISO image
+vagrant box add ubuntu/focal64 (Ubuntu 22.04)
+-pentru generatea fisierului de configurare 'Vagrantfile'
+vagrant init ubuntu/focal64
+-pornire VM
+vagrant up
+-pornire si preconfigurare/reconfigurare VM
+vagrant up --provision
+-preconfigurare/reconfigurare VM (fiind deja pornita)
+vagrant provision
+-inchidere VM
+vagrant halt
+-restart VM
+vagrant reload
+-conectare VM (localhost)
+vagrant ssh
+
+Ansible:
+***playbook-ul este disponibil in fisierul de configurare*** 
+***'Vagrantfile' impreuna cu un script SHELL***
+
+- name: Instalare utilitare și creare directoare
+  hosts: localhost
+  become: true
+  become_user: student
+  tasks:
+    - name: Instalare pachete
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - git
+        - nano
+        - vim
+        - zip
+        - unzip
+
+    - name: Creare readme.txt
+      ansible.builtin.file:
+        path: /home/student/readme.txt
+        state: touch
+
+    - name: Adaugare text in readme.txt
+      ansible.builtin.lineinfile:
+        path: /home/student/readme.txt
+        line: "{{ item }}"
+      with_items:
+        - This is line 1 of readme.txt
+        - This is line 2 of readme.txt
+        - This is line 3 of readme.txt
+
+    - name: Creare labinfo.txt
+      ansible.builtin.file:
+        path: /home/student/labinfo.txt
+        state: touch
+
+    - name: Adaugare text in labinfo.txt
+      ansible.builtin.lineinfile:
+        path: /home/student/labinfo.txt
+        line: "{{ item }}"
+      with_items:
+        - This is line 1 of labinfo.txt
+        - This is line 2 of labinfo.txt
+        - This is line 3 of labinfo.txt
+
+    - name: Creare director exercitiul1
+      ansible.builtin.file:
+        path: /home/student/exercitiul1
+        state: directory
+
+    - name: Create director exercitiul2
+      ansible.builtin.file:
+        path: /home/student/exercitiul2
+        state: directory
+
+    - name: Create director exercitiul3
+      ansible.builtin.file:
+        path: /home/student/exercitiul3
+        state: directory
+
+Puppet:
+***director 'manifest' + script Puppet (blueprint.pp) nefolosite***
+
+#execute apt-get update
+exec { 'apt-update':
+	command => '/usr/bin/apt-get update'
+}
+
+#install redis-server package
+package { 'redis-server':
+	require => Exec ['apt-update'],
+	ensure => latest,
+}
+
+#run redis-server
+service { 'redis-server':
+	ensure => running,
+	require => Package['redis-server'],
+}
+
+#create a directory
+file { "home/vagrant/test-dir":
+	ensure => "directory",
+	owner => "vagrant",
+	group => "vagrant",
+	mode => 750
+}
+
+.bashrc:
+***modificari minore aduse fisierului .bashrc***
+***pentru customizarea VM-ului***
+
+[...]
+
+clear
+clear
+echo "            Laboratorul <<Gestionarea directoarelor si fisierelor>>             "
+echo "                        Bine ai venit, $USER                                   "
+echo "                                                                               "
+echo "                                                                               "
+echo "                        ▐▓█▀▀▀▀▀▀▀▀▀█▓▌░▄▄▄▄▄░                                 "
+echo "                        ▐▓█░░▀░░▀▄░░█▓▌░█▄▄▄█░                                 "
+echo "                        ▐▓█░░▄░░▄▀░░█▓▌░█▄▄▄█░                                 "
+echo "                        ▐▓█▄▄▄▄▄▄▄▄▄█▓▌░█████░                                 "
+echo "                        ░░░░▄▄███▄▄░░░░░█████░                                 "
+echo "                                                                               "
+echo "                    • ▌ ▄ ·. ▄▄▄▄▄▄ ▄▄▄·   ▄▄▄                                 "
+echo "                    ·██ ▐███▪▀•██ ▀▐█ ▀█   ▀▄ █· ▄█▀▄                          "
+echo "                    ▐█ ▌▐▌▐█·  ▐█.▪▄█▀▀█   ▐▀▀▄ ▐█▌.▐▌                         "
+echo "                    ██ ██▌▐█▌  ▐█▌·▐█▪ ▐▌  ▐█•█▌▐█▌.▐▌                         "
+echo "                    ▀▀  █▪▀▀▀  ▀▀▀  ▀  ▀ ▀ .▀  ▀ ▀█▄▀▪                         "
+echo "                                                                               "
+echo "                                                                               "
+echo "                                                                               "
