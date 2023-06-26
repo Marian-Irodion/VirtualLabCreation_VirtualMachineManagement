@@ -6,7 +6,6 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -76,7 +75,7 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-	sed -i 's/#deprecation_warnings = True/#deprecation_warnings = False/g' /etc/ansible/ansible.cfg
+    	sed -i 's/#deprecation_warnings = True/#deprecation_warnings = False/g' /etc/ansible/ansible.cfg
         sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
         sed -i 's/ChallengeResponseAuthentication no/ChallengeResponseAuthentication yes/g' /etc/ssh/sshd_config    
         systemctl restart sshd.service
@@ -139,23 +138,32 @@ Vagrant.configure("2") do |config|
         - { name: adina.vaman, directory: ex1 }
         - { name: adina.vaman, directory: ex2 }
         - { name: adina.vaman, directory: ex3 }
-        - { name: adina.vaman, directory: readme.txt }
         - { name: dragos.ioana, directory: ex1 }
         - { name: dragos.ioana, directory: ex2 }
         - { name: dragos.ioana, directory: ex3 }
-        - { name: dragos.ioana, directory: readme.txt }
         - { name: mihai.coca, directory: ex1 }
         - { name: mihai.coca, directory: ex2 }
         - { name: mihai.coca, directory: ex3 }
-        - { name: mihai.coca, directory: readme.txt }
         - { name: dan.avram, directory: ex1 }
         - { name: dan.avram, directory: ex2 }
         - { name: dan.avram, directory: ex3 }
-        - { name: dan.avram, directory: readme.txt }
         - { name: constantin.grumazescu, directory: ex1 }
         - { name: constantin.grumazescu, directory: ex2 }
         - { name: constantin.grumazescu, directory: ex3 }
-        - { name: constantin.grumazescu, directory: readme.txt }
+
+    - name: Create readme.txt file
+      file:
+        path: "/home/{{ item.name }}/readme.txt"
+        state: touch
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0644"
+      with_items:
+        - { name: adina.vaman }
+        - { name: dragos.ioana }
+        - { name: mihai.coca }
+        - { name: dan.avram }
+        - { name: constantin.grumazescu }
 
 EOF
 
@@ -164,10 +172,5 @@ EOF
 	sudo sed -i 's/.*pam_motd\.so.*/#session optional pam_motd.so/' /etc/pam.d/sshd
 
   SHELL
-
-  # config.vm.provision "puppet" do |puppet|
-  # 	puppet.manifests_path = "manifests"
-  # 	puppet.manifest_file = "blueprint.pp"
-  # end
 
 end
