@@ -16,14 +16,13 @@ vagrant reload
 -conectare VM (localhost)
 vagrant ssh
 
-Ansible:
+Ansible (stock):
 ***playbook-ul este disponibil in fisierul de configurare*** 
 ***'Vagrantfile' impreuna cu un script SHELL***
 
-- name: Instalare utilitare și creare directoare
+- name: Instalare utilitare
   hosts: localhost
   become: true
-  become_user: student
   tasks:
     - name: Instalare pachete
       apt:
@@ -35,49 +34,85 @@ Ansible:
         - vim
         - zip
         - unzip
+        - net-tools
 
-    - name: Creare readme.txt
-      ansible.builtin.file:
-        path: /home/student/readme.txt
-        state: touch
+- name: Create users and directories
+  hosts: localhost
+  become: true
+  vars:
+    users:
+      - name: adina.vaman
+        password: adina
+      - name: dragos.ioana
+        password: dragos
+      - name: mihai.coca
+        password: mihai
+      - name: dan.avram
+        password: dan
+      - name: constantin.grumazescu
+        password: constantin
 
-    - name: Adaugare text in readme.txt
-      ansible.builtin.lineinfile:
-        path: /home/student/readme.txt
-        line: "{{ item }}"
+  tasks:
+    - name: Create users
+      user:
+        name: "{{ item.name }}"
+        password: "{{ item.password | password_hash('sha512') }}"
+        shell: /bin/bash
+        createhome: yes
+        home: "/home/{{ item.name }}"
+      with_items: "{{ users }}"
+
+    - name: Create directories
+      file:
+        path: "/home/{{ item.name }}/{{ item.directory }}"
+        state: directory
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0755"
       with_items:
-        - This is line 1 of readme.txt
-        - This is line 2 of readme.txt
-        - This is line 3 of readme.txt
+        - { name: adina.vaman, directory: ex1 }
+        - { name: adina.vaman, directory: ex2 }
+        - { name: adina.vaman, directory: ex3 }
+        - { name: dragos.ioana, directory: ex1 }
+        - { name: dragos.ioana, directory: ex2 }
+        - { name: dragos.ioana, directory: ex3 }
+        - { name: mihai.coca, directory: ex1 }
+        - { name: mihai.coca, directory: ex2 }
+        - { name: mihai.coca, directory: ex3 }
+        - { name: dan.avram, directory: ex1 }
+        - { name: dan.avram, directory: ex2 }
+        - { name: dan.avram, directory: ex3 }
+        - { name: constantin.grumazescu, directory: ex1 }
+        - { name: constantin.grumazescu, directory: ex2 }
+        - { name: constantin.grumazescu, directory: ex3 }
 
-    - name: Creare labinfo.txt
-      ansible.builtin.file:
-        path: /home/student/labinfo.txt
+    - name: Create readme.txt file
+      file:
+        path: "/home/{{ item.name }}/readme.txt"
         state: touch
-
-    - name: Adaugare text in labinfo.txt
-      ansible.builtin.lineinfile:
-        path: /home/student/labinfo.txt
-        line: "{{ item }}"
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0644"
       with_items:
-        - This is line 1 of labinfo.txt
-        - This is line 2 of labinfo.txt
-        - This is line 3 of labinfo.txt
+        - { name: adina.vaman }
+        - { name: dragos.ioana }
+        - { name: mihai.coca }
+        - { name: dan.avram }
+        - { name: constantin.grumazescu }
 
-    - name: Creare director exercitiul1
-      ansible.builtin.file:
-        path: /home/student/exercitiul1
-        state: directory
-
-    - name: Create director exercitiul2
-      ansible.builtin.file:
-        path: /home/student/exercitiul2
-        state: directory
-
-    - name: Create director exercitiul3
-      ansible.builtin.file:
-        path: /home/student/exercitiul3
-        state: directory
+    - name: Create labinfo.txt file
+      file:
+        path: "/home/{{ item.name }}/labinfo.txt"
+        state: touch
+        owner: "{{ item.name }}"
+        group: "{{ item.name }}"
+        mode: "0644"
+      with_items:
+        - { name: adina.vaman }
+        - { name: dragos.ioana }
+        - { name: mihai.coca }
+        - { name: dan.avram }
+        - { name: constantin.grumazescu }
 
 Puppet:
 ***director 'manifest' + script Puppet (blueprint.pp) nefolosite***
