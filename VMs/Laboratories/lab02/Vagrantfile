@@ -207,6 +207,33 @@ Vagrant.configure("2") do |config|
         - "/home/dan.avram"
         - "/home/constantin.grumazescu"
 
+    - name: Adaugă conținut în fișierul labinfo.txt pentru fiecare utilizator
+      copy:
+        dest: "{{ item }}/labinfo.txt"
+        content: |
+          - Exerciții:
+          - 
+          - 1. Creați un utilizator nou și adăugați-l într-un grup existent.
+          - 2. Modificați permisiunile unui fișier pentru un anumit utilizator și grup.
+          - 3. Schimbați parola unui utilizator.
+          - --------------------------------------------------------------------------------------
+          - Utilități necesare: adduser, usermod, chown, chgrp, chmod, passwd
+          - 
+          - adduser: Comandă utilizată pentru a crea un utilizator nou în sistem.
+          - usermod: Comandă utilizată pentru a modifica setările unui utilizator existent, 
+          -          cum ar fi adăugarea într-un grup.
+          - chown: Comandă utilizată pentru a schimba proprietarul unui fișier sau director.
+          - chgrp: Comandă utilizată pentru a schimba grupul unui fișier sau director.
+          - chmod: Comandă utilizată pentru a schimba permisiunile de acces ale unui fișier
+          -        sau director.
+          - passwd: Comandă utilizată pentru a schimba parola unui utilizator.
+      loop:
+        - "/home/adina.vaman"
+        - "/home/mihai.coca"
+        - "/home/dragos.ioana"
+        - "/home/dan.avram"
+        - "/home/constantin.grumazescu"
+
 EOF
 
 	ansible-playbook setup.yml

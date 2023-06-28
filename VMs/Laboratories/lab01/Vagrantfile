@@ -207,6 +207,32 @@ Vagrant.configure("2") do |config|
         - "/home/dan.avram"
         - "/home/constantin.grumazescu"
 
+    - name: Adaugă conținut în fișierul labinfo.txt pentru fiecare utilizator
+      copy:
+        dest: "{{ item }}/labinfo.txt"
+        content: |
+          - Exerciții:
+          - 
+          - 1. Creați un director nou și verificați permisiunile acestuia.
+          - 2. Copiați un fișier într-un alt director și redenumiți-l.
+          - 3. Creați un fișier gol și adăugați conținut în el.
+          - ---------------------------------------------------------------------------
+          - Utilități necesare: mkdir, ls, cp, mv, touch, cat
+          - 
+          - mkdir: Comandă utilizată pentru a crea un director nou în sistem.
+          - ls: Comandă utilizată pentru a lista conținutul unui director.
+          - cp: Comandă utilizată pentru a copia fișiere și directoare.
+          - mv: Comandă utilizată pentru a muta sau redenumi fișiere și directoare.
+          - touch: Comandă utilizată pentru a crea un fișier gol sau a actualiza data de
+          -        modificare a unui fișier existent.
+          - cat: Comandă utilizată pentru a afișa conținutul unui fișier.
+      loop:
+        - "/home/adina.vaman"
+        - "/home/mihai.coca"
+        - "/home/dragos.ioana"
+        - "/home/dan.avram"
+        - "/home/constantin.grumazescu"
+
 EOF
 
 	ansible-playbook setup.yml

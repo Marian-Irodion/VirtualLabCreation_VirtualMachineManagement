@@ -207,6 +207,34 @@ Vagrant.configure("2") do |config|
         - "/home/dan.avram"
         - "/home/constantin.grumazescu"
 
+    - name: Adaugă conținut în fișierul labinfo.txt pentru fiecare utilizator
+      copy:
+        dest: "{{ item }}/labinfo.txt"
+        content: |
+          - Exerciții:
+          - 
+          - 1. Afișați adresa IP și informațiile de rețea ale sistemului.
+          - 2. Ping-uiți un alt dispozitiv de pe rețea pentru a verifica conectivitatea.
+          - 3. Configurați o adresă IP statică pe o interfață de rețea.
+          - ----------------------------------------------------------------------------
+          - Utilități necesare: ifconfig, ip, ping, ifup, ifdown
+          - 
+          - ifconfig: Comandă utilizată pentru a afișa informații despre interfețele de 
+          -           rețea, inclusiv adresele IP.
+          - ip: Comandă utilizată pentru a configura și afișa informații despre interfețele
+          -     de rețea.
+          - ping: Comandă utilizată pentru a verifica conectivitatea către un alt 
+          -       dispozitiv de pe rețea.
+          - ifup și ifdown: Comenzi utilizate pentru a activa sau dezactiva o interfață 
+          -                 de rețea.
+
+      loop:
+        - "/home/adina.vaman"
+        - "/home/mihai.coca"
+        - "/home/dragos.ioana"
+        - "/home/dan.avram"
+        - "/home/constantin.grumazescu"
+
 EOF
 
 	ansible-playbook setup.yml

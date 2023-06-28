@@ -16,9 +16,10 @@ vagrant reload
 -conectare VM (localhost)
 vagrant ssh
 
-Ansible (stock):
+Ansible (labs stock blueprint):
 ***playbook-ul este disponibil in fisierul de configurare*** 
 ***'Vagrantfile' impreuna cu un script SHELL***
+
 
 - name: Instalare utilitare
   hosts: localhost
